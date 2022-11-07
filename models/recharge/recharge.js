@@ -1,51 +1,33 @@
 module.exports = (sequelize, DataTypes) => {
-  const RechargeTBL = sequelize.define(
-    'rechargetbl',
-    {
-      Recharge_ID: {
-        type: DataTypes.STRING,
-        primaryKey: true,
-        allowNull: false,
-        unique: true,
-      },
-      Card_No: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      BankType: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      rechargeTime: {
-        type: DataTypes.TIME,
-        allowNull: false,
-      },
-      rechargeTime_end: {
-        type: DataTypes.TIME,
-        allowNull: false,
-      },
-      recharge_Amount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      rechargepreAmount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      rechargepostAmount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      rechargeStatus: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+  const RechargeTBL = sequelize.define('recharge', {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false,
     },
-
-    {
-      updatedAt: false,
+    // card_id: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    // },
+    Transac_Using: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
     },
-  );
+    Transac_Time: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    Transac_Amount: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    Transac_Amount: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  });
 
   return RechargeTBL;
 };

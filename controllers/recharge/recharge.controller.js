@@ -60,3 +60,25 @@ exports.findAll = (req, res) => {
       });
     });
 };
+module.exports.getRechargeById = async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    if (!id) {
+      res.json(createResponse(null, 'recharge card not found', true));
+    } else {
+      const result = await Recharge.findOne({
+        where: {
+          id: id,
+        },
+      });
+
+      if (result) {
+        res.json(createResponse(result));
+      } else {
+        res.json(createResponse(null, 'Card can not be recharged', true));
+      }
+    }
+  } catch (error) {
+    next(error.message);
+  }
+};

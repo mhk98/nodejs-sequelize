@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 
 module.exports = (sequelize, DataTypes, Sequelize) => {
   const usertbls = sequelize.define(
-    'usertbl',
+    'usertbls',
     {
       User_ID: {
         type: DataTypes.INTEGER(10),

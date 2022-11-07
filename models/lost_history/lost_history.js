@@ -1,16 +1,21 @@
 module.exports = (sequelize, DataTypes) => {
   const lost_historytbl = sequelize.define('lost_historytbl', {
-    Card_No: {
-      type: DataTypes.STRING,
+    id: {
+      type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
-      unique: true,
+      autoIncrement: true,
     },
-    User_ID: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
+    // card_id: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    //   unique: true,
+    // },
+    // user_id: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    //   unique: true,
+    // },
     Lost_Date: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -27,10 +32,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    Reffered_to: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+    // Reffered_to: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    // },
   });
 
   return lost_historytbl;

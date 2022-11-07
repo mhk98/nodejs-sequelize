@@ -30,26 +30,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-// app.get('/', async (req, res) => {
-//   /**
-//    * Root url response
-//    */
-
-//   return res.status(200).json({
-//     message: 'Welcome to sslcommerz app',
-//     url: `${process.env.ROOT}/ssl-request`,
-//   });
-// });
-
-app.get('/ssl-request', async (req, res) => {
-  /**
-   * Create ssl session request
-   */
-
+const demoFunc = async (a) => {
+  const tranId = 'REF123';
   const data = {
-    total_amount: 100,
+    total_amount: a,
     currency: 'BDT',
-    tran_id: 'REF123',
+    tran_id: tranId,
     success_url: 'http://localhost:4000/ssl-payment-success',
     fail_url: 'http://localhost:4000/ssl-payment-fail',
     cancel_url: 'http://localhost:4000/ssl-payment-cancel',
@@ -80,19 +66,33 @@ app.get('/ssl-request', async (req, res) => {
     process.env.STORE_PASSWORD,
     false,
   ); //true for live default false for sandbox
-  sslcommerz.init(data).then((data) => {
-    //process the response that got from sslcommerz
-    //https://developer.sslcommerz.com/doc/v4/#returned-parameters
+  const result = await sslcommerz.init(data);
+  if (result?.GatewayPageURL) {
+    return { tranId, GatewayPageURL: result.GatewayPageURL };
+  } else {
+    return false;
+  }
+};
 
-    if (data?.GatewayPageURL) {
-      return res.status(200).redirect(data?.GatewayPageURL);
-    } else {
-      return res.status(400).json({
-        message: 'Session was not successful',
-      });
-    }
-  });
+app.post('/ssl-request', async (req, res) => {
+  const { amount } = req.body;
+  const ddd = await demoFunc(amount);
+  const reData = await getRechareValue(ddd.tranId);
+  res.json(ddd.GatewayPageURL);
 });
+
+const getRechareValue = async (tranID) => {
+  const data = {
+    tran_id: tranID,
+  };
+  const sslcz = new SSLCommerzPayment(
+    process.env.STORE_ID,
+    process.env.STORE_PASSWORD,
+    false,
+  );
+  const result = await sslcz.validate(data);
+  return result;
+};
 
 app.post('/ssl-payment-notification', async (req, res) => {
   /**
@@ -110,11 +110,47 @@ app.post('/ssl-payment-success', async (req, res) => {
    * If payment successful
    */
 
+  console.log(req.body);
   return res.status(200).json({
     data: req.body,
     message: 'Payment success',
   });
 });
+
+app.get('/ssl-payment-success/:tranId', async (req, res) => {
+  const tranId = req.params.tranId;
+
+  try {
+    const successPayment = await data.findOne({
+      where: {
+        tranId,
+      },
+    });
+    res.send(successPayment);
+  } catch (err) {
+    res.send(err);
+  }
+});
+
+// exports.SSLCommerz_payment_success = async (req, res) => {
+//   const { transactionId } = req.query;
+
+//   if (!transactionId) {
+//     return res.json({ message: 'transactionId must be required' });
+//   } else {
+//     const currentOrder = Order.findByIdAndUpdate(transactionId, {
+//       paymentDone: true,
+//       updatedAt: Date.now(),
+//     });
+
+//     currentOrder.exec((err, result) => {
+//       if (err) console.log(err);
+//       res.redirect(
+//         `${process.env.CLIENT_URL}/checkout/success/${transactionId}`,
+//       );
+//     });
+//   }
+// };
 
 app.post('/ssl-payment-fail', async (req, res) => {
   /**

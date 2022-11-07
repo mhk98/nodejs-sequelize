@@ -1,18 +1,18 @@
 module.exports = (sequelize, DataTypes) => {
   const UsageTbl = sequelize.define(
-    'usagetbl',
+    'usagetbls',
     {
-      Usage_ID: {
-        type: DataTypes.STRING,
+      id: {
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
-      Card_No: {
-        type: DataTypes.STRING(60),
-        allowNull: false,
-        unique: true,
-      },
+      // Card_No: {
+      //   type: DataTypes.STRING(60),
+      //   allowNull: false,
+      //   unique: true,
+      // },
       chargeTime_start: {
         type: DataTypes.DATE,
         allowNull: false,

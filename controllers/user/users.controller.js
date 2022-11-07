@@ -194,3 +194,26 @@ module.exports.refreshToken = async (req, res) => {
     res.json(createResponse(token));
   }
 };
+// get user card by user
+module.exports.getCardByUserId = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    const result = await User.findOne({
+      where: {
+        User_Email: email,
+      },
+      include: [
+        {
+          model: Card,
+          // to check particular data by attributes
+          // attributes: ['Device_Type']
+        },
+      ],
+    });
+
+    res.json(createResponse(result));
+  } catch (error) {
+    console.log(error);
+    next(error.message);
+  }
+};

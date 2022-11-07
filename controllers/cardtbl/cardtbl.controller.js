@@ -50,3 +50,30 @@ module.exports.cardtblInsert = async (req, res) => {
     res.json(createResponse(true, null, `${error.message}`));
   }
 };
+// get all cards of a user using userID
+module.exports.getCardByUserId = async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    //gaurd condition
+    if (!id) {
+      res.json(createResponse(null, 'Card id missing', true));
+    }
+    // body has id
+    else {
+      prepare4_2Json();
+      const result = await Card.findOne({
+        where: {
+          id: id,
+        },
+      });
+
+      if (result) {
+        res.json(createResponse(result));
+      } else {
+        res.json(createResponse(null, 'Card not found with this id', true));
+      }
+    }
+  } catch (error) {
+    next(error.message);
+  }
+};

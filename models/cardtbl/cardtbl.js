@@ -1,13 +1,14 @@
 module.exports = (sequelize, DataTypes) => {
   const CardTbl = sequelize.define(
-    'cardtbl',
+    'cardtbls',
     {
-      Card_NO: {
-        type: DataTypes.STRING,
+      id: {
+        type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false,
       },
+
       Device_Type: {
         type: DataTypes.STRING(60),
         allowNull: false,
@@ -17,10 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(30),
         allowNull: false,
       },
-      User_ID: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+
       Issue_Date: {
         type: DataTypes.DATE,
         allowNull: false,

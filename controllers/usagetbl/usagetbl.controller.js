@@ -3,7 +3,7 @@ const db = require('../../models');
 const Usage = db.usagetbl;
 
 module.exports.usagetblInsert = async (req, res) => {
-    console.log(req.body);
+  console.log(req.body);
   try {
     const {
       Usage_ID,
@@ -16,27 +16,25 @@ module.exports.usagetblInsert = async (req, res) => {
       Last_Vehicle,
       Toll_Gate_No,
       Tunnel_Entry_Point,
-      chargeStatus
-       
+      chargeStatus,
     } = req.body;
-  
-    console.log(req.body.Toll_Gate_No, " bla bla ",Toll_Gate_No);
-  
+
+    console.log(req.body.Toll_Gate_No, ' bla bla ', Toll_Gate_No);
+
     if (
       !Usage_ID ||
       !Card_No ||
-      !chargeTime_start||
+      !chargeTime_start ||
       !chargeTime_end ||
       !charge_Amount ||
       !chargepreAmount ||
       !chargepostAmount ||
       !Last_Vehicle ||
       !Toll_Gate_No ||
-      !Tunnel_Entry_Point||
+      !Tunnel_Entry_Point ||
       !chargeStatus
     ) {
       res.json(createResponse(true, null, 'Parameter missing'));
-    
     } else {
       const result = await Usage.create({
         Usage_ID,
@@ -49,7 +47,7 @@ module.exports.usagetblInsert = async (req, res) => {
         Last_Vehicle,
         Toll_Gate_No,
         Tunnel_Entry_Point,
-        chargeStatus
+        chargeStatus,
       });
       if (result) {
         res.json(createResponse(false, result, 'Record inserted'));
