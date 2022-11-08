@@ -41,6 +41,23 @@ module.exports.register = async (req, res) => {
   }
 };
 
+// Retribe all data
+exports.findAll = (req, res) => {
+  const title = req.query.title;
+  var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+
+  User.findAll({ where: condition })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message:
+          err.message || 'Some error occurred while retrieving recharge.',
+      });
+    });
+};
+
 // verify user
 module.exports.verifyUser = async (req, res) => {
   const { confirmationcode } = req.headers;

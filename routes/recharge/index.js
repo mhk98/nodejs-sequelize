@@ -8,6 +8,6 @@ router.post('/', recharge.rechargeInsert);
 // Retrieve all recharge
 router.get('/', recharge.findAll);
 
-router.get('/reChargeCard', recharge.getRechargeById);
+// router.get('/reChargeCard', recharge.getRechargeById);
 
 module.exports = router;

@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
       // Card_No: {
       //   type: DataTypes.STRING(60),
       //   allowNull: false,
-      //   unique: true,
       // },
       chargeTime_start: {
         type: DataTypes.DATE,

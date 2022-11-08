@@ -30,17 +30,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-const demoFunc = async (a) => {
+const demoFunc = async (amount) => {
   const tranId = 'REF123';
+
   const data = {
-    total_amount: a,
+    total_amount: amount,
     currency: 'BDT',
     tran_id: tranId,
     success_url: 'http://localhost:4000/ssl-payment-success',
     fail_url: 'http://localhost:4000/ssl-payment-fail',
     cancel_url: 'http://localhost:4000/ssl-payment-cancel',
     shipping_method: 'No',
-    product_name: 'Computer.',
+    product_name: 'device_number.',
     product_category: 'Electronic',
     product_profile: 'general',
     cus_name: 'Customer Name',
@@ -61,6 +62,7 @@ const demoFunc = async (a) => {
     ipn_url: `${process.env.ROOT}/ssl-payment-notification`,
   };
 
+  // console.log(data);
   const sslcommerz = new SSLCommerzPayment(
     process.env.STORE_ID,
     process.env.STORE_PASSWORD,
@@ -91,6 +93,7 @@ const getRechareValue = async (tranID) => {
     false,
   );
   const result = await sslcz.validate(data);
+  console.log(result);
   return result;
 };
 
@@ -110,7 +113,8 @@ app.post('/ssl-payment-success', async (req, res) => {
    * If payment successful
    */
 
-  console.log(req.body);
+  // console.log(req.body);
+
   return res.status(200).json({
     data: req.body,
     message: 'Payment success',

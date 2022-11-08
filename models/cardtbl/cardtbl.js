@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
       Device_Type: {
         type: DataTypes.STRING(60),
         allowNull: false,
-        unique: true,
       },
       Physical_ID: {
         type: DataTypes.STRING(30),
@@ -21,24 +20,24 @@ module.exports = (sequelize, DataTypes) => {
 
       Issue_Date: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       Expire_Date: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       amount: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       last_chargeamounte: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
 
       last_chargeTime: {
         type: DataTypes.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       status: {
         type: DataTypes.STRING,
