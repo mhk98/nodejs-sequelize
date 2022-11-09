@@ -1,6 +1,10 @@
+// import sequelize from 'sequelize';
 const { createResponse } = require('../../utils/responseGenerator');
 const db = require('../../models');
-const Lost_history = db.lost_history;
+// const lost_history = require('../../models/lost_history/lost_history');
+const Lost_history = db.lost_historytbls;
+const Card = db.Cardtbl;
+const User = db.User;
 
 module.exports.lost_historyInsert = async (req, res) => {
   try {
@@ -45,3 +49,102 @@ module.exports.lost_historyInsert = async (req, res) => {
     // console.log(error);
   }
 };
+
+//get all cards of a user using userID
+module.exports.getLostHistoryByCardId = async (req, res, next) => {
+  try {
+    const { ID } = req.body;
+    //gaurd condition
+    if (!ID) {
+      res.json(createResponse(null, 'Card id missing', true));
+    }
+    // body has id
+    else {
+      console.log('this is get lost history table by ID');
+      console.log('this is get lost history table by ID:', ID);
+      let tempID = 50016;
+      const result = await Card.findOne({
+        where: {
+          id: ID,
+        },
+        include: [
+          {
+            model: Lost_history,
+            // to check particular data by attributes
+            // attributes: ['Device_Type']
+          },
+        ],
+      });
+
+      if (result) {
+        res.json(createResponse(result));
+      } else {
+        res.json(createResponse(null, 'Card not found with this id', true));
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    next(error.message);
+  }
+};
+module.exports.getOnelostHistory = async (req, res, next) => {
+  try {
+    const { ID } = req.body;
+    //gaurd condition
+    if (!ID) {
+      res.json(createResponse(null, 'Card id missing', true));
+    }
+    // body has id
+    else {
+      console.log('this is get lost history table by ID');
+      console.log('this is get lost  ID:', ID);
+      let tempID = 30002;
+      const result = await Lost_history.findOne({
+        where: {
+          id: ID,
+        },
+      });
+      // const result = await Lost_history.query("select * from lost_historytbls where cardtblId = 50016");
+
+      if (result) {
+        res.json(createResponse(result));
+      } else {
+        res.json(createResponse(null, 'Card not found with this id', true));
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    next(error.message);
+  }
+};
+
+// get user card
+// module.exports.getCardByUserId = async (req, res, next) => {
+//   try {
+//     console.log('ddd');
+//     // const {email} = req.body
+//     const req_id = req.body.id
+//     console.log(typeof(req_id))
+//     console.log(req.body.id)
+//     console.log(req_id)
+
+//     const result = await Card.findOne({
+//       where: {
+//        id : req_id,
+//       },
+//       include: [
+//         {
+//           model: Lost_history,
+//           // to check particular data by attributes
+//           // attributes: ['Device_Type']
+//         }
+//       ]
+//     });
+
+//     res.json(createResponse(result))
+//   }
+//   catch(error){
+//     console.log('user log error: \n',error)
+//     next(error.message)
+//   }
+// }

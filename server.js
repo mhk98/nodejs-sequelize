@@ -6,8 +6,11 @@ const cookieParser = require('cookie-parser');
 const SSLCommerzPayment = require('sslcommerz-lts');
 const bodyParser = require('body-parser');
 const { notFoundHandler, errorHandler } = require('./middlewares/error');
+const { createResponse } = require('././utils/responseGenerator');
 require('./models');
 require('dotenv').config();
+const shortid = require('shortid');
+const recharge = require('./models/recharge/recharge');
 
 // middlewares
 app.use(
@@ -31,7 +34,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 const demoFunc = async (amount) => {
-  const tranId = 'REF123';
+  const tranId = `${shortid.generate()}`;
 
   const data = {
     total_amount: amount,
@@ -62,7 +65,6 @@ const demoFunc = async (amount) => {
     ipn_url: `${process.env.ROOT}/ssl-payment-notification`,
   };
 
-  // console.log(data);
   const sslcommerz = new SSLCommerzPayment(
     process.env.STORE_ID,
     process.env.STORE_PASSWORD,
@@ -85,15 +87,16 @@ app.post('/ssl-request', async (req, res) => {
 
 const getRechareValue = async (tranID) => {
   const data = {
-    tran_id: tranID,
+    tranID: tranID,
   };
+  // console.log(tranID);
   const sslcz = new SSLCommerzPayment(
     process.env.STORE_ID,
     process.env.STORE_PASSWORD,
     false,
   );
   const result = await sslcz.validate(data);
-  console.log(result);
+  // console.log(result);
   return result;
 };
 
@@ -108,31 +111,46 @@ app.post('/ssl-payment-notification', async (req, res) => {
   });
 });
 
+// app.post('/ssl-payment-success', async (req, res) => {
+//   /**
+//    * If payment successful
+//    */
+
+//   return res.status(200).json({
+//     data: req.body,
+//     message: 'Payment success',
+//   });
+// });
+
 app.post('/ssl-payment-success', async (req, res) => {
-  /**
-   * If payment successful
-   */
+  try {
+    // const data = req.body;
+    // console.log(data);
+    // res.redirect('http://localhost:3000/success');
 
-  // console.log(req.body);
-
-  return res.status(200).json({
-    data: req.body,
-    message: 'Payment success',
-  });
+    return res.status(200).json({
+      data: req.body,
+      message: 'Payment success',
+    });
+  } catch (error) {
+    res.json('Data not found');
+  }
 });
 
-app.get('/ssl-payment-success/:tranId', async (req, res) => {
-  const tranId = req.params.tranId;
+// const result = await Recharge.create({
+//   Recharge_ID: 34584,
+//   Card_ID,
+//   Transac_Using,
+//   Transac_Time,
+//   Transac_Amount,
+//   Transac_Status,
+// });
 
+app.get('/ssl-payment-success/:tranID', async (req, res) => {
   try {
-    const successPayment = await data.findOne({
-      where: {
-        tranId,
-      },
-    });
-    res.send(successPayment);
-  } catch (err) {
-    res.send(err);
+    const rechargeInfo = async (tranID) => {};
+  } catch (error) {
+    res.json('Data not found');
   }
 });
 

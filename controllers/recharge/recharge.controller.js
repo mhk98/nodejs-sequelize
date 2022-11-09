@@ -82,3 +82,39 @@ module.exports.getRechargeById = async (req, res, next) => {
     next(error.message);
   }
 };
+
+// get all cards of a user using card no
+module.exports.getRechargeById = async (req, res, next) => {
+  try {
+    //card no
+    const { id } = req.body;
+    //gaurd condition
+    if (!id) {
+      res.json(createResponse(null, 'rechage card not found', true));
+    }
+    // body has id
+    else {
+      const result = await Card.findOne({
+        where: {
+          //checking whether id is matching
+          id: id,
+        },
+        include: [
+          {
+            model: Recharge,
+            // to check particular data by attributes
+            // attributes: ['Device_Type']
+          },
+        ],
+      });
+
+      if (result) {
+        res.json(createResponse(result));
+      } else {
+        res.json(createResponse(null, 'Card not found with this id', true));
+      }
+    }
+  } catch (error) {
+    next(error.message);
+  }
+};
