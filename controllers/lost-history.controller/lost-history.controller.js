@@ -2,8 +2,8 @@
 const { createResponse } = require('../../utils/responseGenerator');
 const db = require('../../models');
 // const lost_history = require('../../models/lost_history/lost_history');
-const Lost_history = db.lost_historytbls;
-const Card = db.Cardtbl;
+const Lost_history = db.lost_history;
+const Card = db.cardtbl;
 const User = db.User;
 
 module.exports.lost_historyInsert = async (req, res) => {

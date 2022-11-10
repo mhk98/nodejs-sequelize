@@ -6,11 +6,10 @@ const cookieParser = require('cookie-parser');
 const SSLCommerzPayment = require('sslcommerz-lts');
 const bodyParser = require('body-parser');
 const { notFoundHandler, errorHandler } = require('./middlewares/error');
-const { createResponse } = require('././utils/responseGenerator');
 require('./models');
 require('dotenv').config();
+// const success = './models/success/success.js';
 const shortid = require('shortid');
-const recharge = require('./models/recharge/recharge');
 
 // middlewares
 app.use(
@@ -33,9 +32,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-const demoFunc = async (amount) => {
-  const tranId = `${shortid.generate()}`;
-
+const demoFunc = async (amount, TranId) => {
+  // const tranId = `${shortid.generate()}`;
+  const tranId = TranId;
   const data = {
     total_amount: amount,
     currency: 'BDT',
@@ -60,7 +59,7 @@ const demoFunc = async (amount) => {
     multi_card_name: 'mastercard',
     value_a: 'ref001_A',
     value_b: 'ref002_B',
-    value_c: 'ref003_C',
+    // value_c: 'ref003_C',
     value_d: 'ref004_D',
     ipn_url: `${process.env.ROOT}/ssl-payment-notification`,
   };
@@ -79,24 +78,28 @@ const demoFunc = async (amount) => {
 };
 
 app.post('/ssl-request', async (req, res) => {
+  console.log('>>> i am from submit button');
+  console.log(req.body);
   const { amount } = req.body;
-  const ddd = await demoFunc(amount);
-  const reData = await getRechareValue(ddd.tranId);
-  res.json(ddd.GatewayPageURL);
+  const TranId = `${shortid.generate()}`;
+  const ddd = await demoFunc(amount, TranId);
+  console.log(ddd);
+  const res_ssl = res.json(ddd.GatewayPageURL);
+  // console.log(res_ssl);
+  // console.log('after res_ssl' * 10);
 });
 
 const getRechareValue = async (tranID) => {
   const data = {
     tranID: tranID,
   };
-  // console.log(tranID);
   const sslcz = new SSLCommerzPayment(
     process.env.STORE_ID,
     process.env.STORE_PASSWORD,
     false,
   );
   const result = await sslcz.validate(data);
-  // console.log(result);
+
   return result;
 };
 
@@ -104,81 +107,45 @@ app.post('/ssl-payment-notification', async (req, res) => {
   /**
    * If payment notification
    */
-
   return res.status(200).json({
     data: req.body,
     message: 'Payment notification',
   });
 });
 
-// app.post('/ssl-payment-success', async (req, res) => {
-//   /**
-//    * If payment successful
-//    */
-
-//   return res.status(200).json({
-//     data: req.body,
-//     message: 'Payment success',
-//   });
-// });
-
+function intimidiate_process(successful_json, status) {
+  console.log(
+    '------------------------intimidiate_process----------------------------',
+  );
+  let local_payemnt_data = successful_json;
+  console.log('tran_id ', local_payemnt_data.tran_id);
+  console.log(status);
+  console.log(
+    '------------------------intimidiate_process----------------------------',
+  );
+}
 app.post('/ssl-payment-success', async (req, res) => {
-  try {
-    // const data = req.body;
-    // console.log(data);
-    // res.redirect('http://localhost:3000/success');
+  /**
+   * If payment successful
+   */
+  // console.log('req.body----------------------------------------------------');
+  let status = 'susccess';
+  intimidiate_process(req.body, status);
+  // console.log(req.body.tran_id);
+  // console.log('req.body----------------------------------------------------');
 
-    return res.status(200).json({
-      data: req.body,
-      message: 'Payment success',
-    });
-  } catch (error) {
-    res.json('Data not found');
-  }
+  return res.status(200).json({
+    data: req.body,
+    message: 'Payment success',
+  });
 });
-
-// const result = await Recharge.create({
-//   Recharge_ID: 34584,
-//   Card_ID,
-//   Transac_Using,
-//   Transac_Time,
-//   Transac_Amount,
-//   Transac_Status,
-// });
-
-app.get('/ssl-payment-success/:tranID', async (req, res) => {
-  try {
-    const rechargeInfo = async (tranID) => {};
-  } catch (error) {
-    res.json('Data not found');
-  }
-});
-
-// exports.SSLCommerz_payment_success = async (req, res) => {
-//   const { transactionId } = req.query;
-
-//   if (!transactionId) {
-//     return res.json({ message: 'transactionId must be required' });
-//   } else {
-//     const currentOrder = Order.findByIdAndUpdate(transactionId, {
-//       paymentDone: true,
-//       updatedAt: Date.now(),
-//     });
-
-//     currentOrder.exec((err, result) => {
-//       if (err) console.log(err);
-//       res.redirect(
-//         `${process.env.CLIENT_URL}/checkout/success/${transactionId}`,
-//       );
-//     });
-//   }
-// };
 
 app.post('/ssl-payment-fail', async (req, res) => {
   /**
    * If payment failed
    */
-
+  let status = 'fail';
+  intimidiate_process(req.body, status);
   return res.status(200).json({
     data: req.body,
     message: 'Payment failed',
@@ -189,6 +156,8 @@ app.post('/ssl-payment-cancel', async (req, res) => {
   /**
    * If payment cancelled
    */
+  let status = 'cancel';
+  intimidiate_process(req.body, status);
 
   return res.status(200).json({
     data: req.body,

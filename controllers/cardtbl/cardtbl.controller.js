@@ -1,6 +1,7 @@
 const { createResponse } = require('../../utils/responseGenerator');
 const db = require('../../models');
 const Card = db.cardtbl;
+const User = db.user;
 
 module.exports.cardtblInsert = async (req, res) => {
   try {
