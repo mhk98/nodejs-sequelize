@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Success = sequelize.define(
+  const SSLCommerz = sequelize.define(
     'success',
     {
       tran_id: {
@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       val_id: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      amount: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       card_type: {
@@ -46,5 +50,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   );
 
-  return Success;
+  return SSLCommerz;
 };

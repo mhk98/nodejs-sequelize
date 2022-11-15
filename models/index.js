@@ -15,7 +15,10 @@ db.sequelize
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 db.user = require('../models/user/user')(db.sequelize, DataTypes);
-// db.success = require('../models/success/success')(db.sequelize, DataTypes);
+db.sslCommerz = require('../models/sslCommerz/sslCommerz')(
+  db.sequelize,
+  DataTypes,
+);
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // db.Hotel = require('../models/hotel/hotel')(db.sequelize, DataTypes);

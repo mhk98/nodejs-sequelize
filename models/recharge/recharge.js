@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const RechargeTBL = sequelize.define('recharge', {
+  const RechargeTBL = sequelize.define('recharges', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -10,23 +10,34 @@ module.exports = (sequelize, DataTypes) => {
     //   type: DataTypes.INTEGER,
     //   allowNull: false,
     // },
-    Transac_Using: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    Transac_Time: {
+    BankType: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    Transac_Amount: {
-      type: DataTypes.STRING,
+    rechargeTime: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
-    Transac_Amount: {
-      type: DataTypes.STRING,
+    rechargeTime_end: {
+      type: DataTypes.DATE,
       allowNull: false,
     },
+    recharge_Amount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    rechargepreAmount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    rechargepostAmount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    // rechargeStatus: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    // },
   });
 
   return RechargeTBL;
