@@ -11,8 +11,8 @@ const demoFunc = async (amount, TranId) => {
     currency: 'BDT',
     tran_id: TranId,
     success_url: `http://localhost:4000/api/v1/ssl-payment-success?transactionId=${TranId}`,
-    fail_url: 'http://localhost:4000/ssl-payment-fail',
-    cancel_url: 'http://localhost:4000/ssl-payment-cancel',
+    fail_url: `http://localhost:4000/api/v1/ssl-payment-fail?transactionId=${TranId}`,
+    cancel_url: `http://localhost:4000/api/v1/ssl-payment-cancel?transactionId=${TranId}`,
     shipping_method: 'No',
     product_name: 'device_number.',
     product_category: 'Electronic',
@@ -32,7 +32,7 @@ const demoFunc = async (amount, TranId) => {
     value_b: 'ref002_B',
     // value_c: 'ref003_C',
     value_d: 'ref004_D',
-    ipn_url: `${process.env.ROOT}/ssl-payment-notification`,
+    ipn_url: `http://localhost:4000/api/v1/ssl-payment-notification?transactionId=${TranId}`,
   };
 
   const sslcommerz = new SSLCommerzPayment(
@@ -65,7 +65,7 @@ module.exports.sslpaymentsuccessInsert = async (req, res) => {
   if (body.status === 'VALID') {
     // uodate  // reacharge_status: Pending => Complete
   }
-  res.redirect(`http://localhost:3000/recharge/${transactionId}`);
+  res.redirect(`http://localhost:3000/success/${transactionId}`);
 };
 
 module.exports.findOne = async (req, res) => {
